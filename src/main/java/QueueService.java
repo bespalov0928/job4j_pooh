@@ -7,29 +7,34 @@ public class QueueService implements Service {
 
     @Override
     public Resp process(Req req) {
+        final String POST = "POST";
+        final String GET = "GET";
         String text = "";
         int status = 200;
         String nameQueue = "WEATHER";
-        //String nameParam = "TEMPERATURE";
         map.putIfAbsent(nameQueue, new ConcurrentLinkedQueue<String>());
-        if (req.method().toUpperCase().equals("POST")) {
-            //map.get(nameQueue).add(req.valueOf(nameParam));
-            map.get(nameQueue).add(req.getText());
-            text = req.getText() + " : OK";
-//            text = req.valueOf(nameParam);
-//            if (text == null || text.equals("")) {
-//                status = 999;
-//                text = "";
-//            }
-
-        } else if (req.method().toUpperCase().equals("GET")) {
-            text = map.get(nameQueue).poll();
-            if (text == null || text.equals("")) {
-                status = 999;
-                text = "not date";
-            }
+        if (req.method().toUpperCase().equals(POST)) {
+            text = processPost(nameQueue, req);
+        } else if (req.method().toUpperCase().equals(GET)) {
+            text = processGet(nameQueue, status);
         }
         Resp resp = new Resp(text, status);
         return resp;
+    }
+
+    private String processPost(String nameQueue, Req req) {
+        String text = "";
+        map.get(nameQueue).add(req.getText());
+        text = req.getText() + " : OK";
+        return text;
+    }
+
+    private String processGet(String nameQueue, int status){
+        String text = map.getOrDefault(nameQueue, new ConcurrentLinkedQueue<String>()).poll();
+        if (text == null || text.equals("")) {
+            status = 999;
+            text = "not date";
+        }
+        return text;
     }
 }

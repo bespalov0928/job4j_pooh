@@ -18,7 +18,7 @@ public class PoohServer {
 //                Runtime.getRuntime().availableProcessors()
 //        );
 
-        try (ServerSocket server = new ServerSocket(9003)) {
+        try (ServerSocket server = new ServerSocket(9001)) {
 
             while (!server.isClosed()) {
                 Socket socket = server.accept();

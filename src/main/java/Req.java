@@ -1,105 +1,95 @@
 
 public class Req {
     private final String text;
-
+    private String mode = "";
+    private String method = "";
+    private String nameQueue = "";
+    private String value = "";
 
     public Req(String text) {
         this.text = text;
+        this.mode = setMode();
+        this.method = setMethod();
+        this.nameQueue = setNameQueue();
+
     }
 
-    public String valueOf(String key) {
+    public void setValueOf(String key) {
         String str = "";
         String[] arrFirst = text.toUpperCase().split(key);
-        if (arrFirst.length < 2) {
-            return str;
+        if (arrFirst.length > 1) {
+            str = arrFirst[1];
+            str = str.replace("=", "");
+            str = str.replace(" ", "");
+            this.value = str;
         }
-        str = arrFirst[1];
-        str = str.replace("=", "");
-        str = str.replace(" ", "");
-        return str;
     }
 
     /**
      * queue, topic
-     *
      * @return
      */
-    public String mode() {
+    private String setMode() {
 
-        String str = "";
         String textTemp = text.replace(" ", "");
         String[] arrFirst = textTemp.split("\r\n");
         if (arrFirst.length == 0) {
             return "";
         }
-        str = arrFirst[0];
+        String str = arrFirst[0];
         String[] arrSecond = str.split("/");
         if (arrSecond.length == 0) {
             return "";
         }
-        str = arrSecond[1];
-//        String[] arrFirst = text.split(" ");
-//        if (arrFirst.length < 2) {
-//            return str;
-//        }
-//        String strFirst = arrFirst[1];
-//        //System.out.println("strTmp:" + strFirst);
-//
-//        String[] arrSecond = strFirst.split("/");
-//        if (arrSecond.length < 2) {
-//            return str;
-//        }
-//        str = arrSecond[1];
-        return str;
-
+        return arrSecond[1];
     }
 
     /**
      * get, post
-     *
      * @return
      */
-    public String method() {
+    private String setMethod() {
 
-        String str = "";
         String[] arrFirst = text.split(" ");
         if (arrFirst.length < 2) {
-            return str;
+            return "";
         }
-        str = arrFirst[0];
+        String str = arrFirst[0];
         return str;
-
     }
 
     /**
      * weather
-     *
      * @return
      */
-    public String nameQueue() {
-        String str = "";
+    private String setNameQueue() {
         String[] arrFirst = text.split(" ");
         if (arrFirst.length < 2) {
-            return str;
+            return "";
         }
         String strFirst = arrFirst[1];
-        //System.out.println("strTmp:" + strFirst);
 
         String[] arrSecond = strFirst.split("/");
         if (arrSecond.length < 2) {
-            return str;
+            return "";
         }
-        str = arrSecond[2];
-        return str;
-
-    }
-
-    public String nameParam() {
-        String str = "";
+        String str = arrSecond[2];
         return str;
     }
 
     public String getText() {
         return text;
+    }
+
+    public String mode() {
+        return mode;
+    }
+
+    public String method() {
+        return method;
+    }
+
+    public String getNameQueue() {
+        return nameQueue;
     }
 }
